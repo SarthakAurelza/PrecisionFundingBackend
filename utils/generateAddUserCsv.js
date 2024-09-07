@@ -101,7 +101,8 @@ function generateAddUserCSV(userInfo) {
   ];
 
   const dirPath = './csv_files/add_user';
-  const filePath = path.join(dirPath,`${data[0].user_id}_${timestamp}.csv`);
+  const fileName = `${data[0].user_id}_${timestamp}.csv`;
+  const filePath = path.join(dirPath,fileName);
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath, { recursive: true });
   }
@@ -112,7 +113,7 @@ function generateAddUserCSV(userInfo) {
     .write(data, { headers: false })
     .pipe(ws);
 
-  return filePath;
+  return {filePath, fileName};
 }
 
 module.exports={
