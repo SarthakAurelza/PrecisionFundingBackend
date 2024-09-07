@@ -109,8 +109,8 @@ router.post('/handlerithmic', async (req, res) => {
   await client.listFiles(".");
 
   //* Upload local file to remote file
-  // await client.uploadFile(addUserPath, "./RithmicTest/add_user/Aurelza-0002_2024-09-03_16-26-49.csv");
-  // await client.uploadFile(addAccountPath, "./RithmicTest/add_user/Aurelza-0002_2024-09-03_16-26-49.csv");
+  // await client.uploadFile(addUserPath, `./RithmicTest/add_user/${addUserFileName}`);
+  // await client.uploadFile(addAccountPath, `./RithmicTest/add_user/${addAccountFileName}`);
 
 
   await client.disconnect();
