@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const Client = require('ssh2-sftp-client');
 const {generateAddUserCSV} = require("../utils/generateAddUserCsv");
+const {generateAddAccountCSV} = require("../utils/generateAddAccountCsv");
 
 class SFTPClient {
   constructor() {
@@ -97,7 +98,8 @@ router.post('/handlerithmic', async (req, res) => {
   const userInfo = req.body;
   console.log('User Info: ', userInfo);
 
-  generateAddUserCSV(userInfo);
+  const {addUserPath, addUserFileName} = generateAddUserCSV(userInfo);
+  const {addAccountPath, addAccountFileName} = generateAddAccountCSV(userInfo);
 
   //* Open the connection
   const client = new SFTPClient();
@@ -107,7 +109,8 @@ router.post('/handlerithmic', async (req, res) => {
   await client.listFiles(".");
 
   //* Upload local file to remote file
-  // await client.uploadFile("./add_user/Aurelza-0002_2024-09-03_16-26-49.csv", "./RithmicTest/add_user/Aurelza-0002_2024-09-03_16-26-49.csv");
+  // await client.uploadFile(addUserPath, "./RithmicTest/add_user/Aurelza-0002_2024-09-03_16-26-49.csv");
+  // await client.uploadFile(addAccountPath, "./RithmicTest/add_user/Aurelza-0002_2024-09-03_16-26-49.csv");
 
 
   await client.disconnect();
