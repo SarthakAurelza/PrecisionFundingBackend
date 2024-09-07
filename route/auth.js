@@ -12,7 +12,7 @@ admin.initializeApp({
 // for signup
 
 router.post("/signup", async (req, res) => {
-    console.log("Attempted for signup");
+    // console.log("Attempted for signup");
     // console.log(req.body);
     const {
         email, password, firstName, lastName, address,
@@ -37,7 +37,7 @@ router.post("/signup", async (req, res) => {
             email,
             customerId
         });
-        console.log("user created and saved in db");
+        // console.log("user created and saved in db");
         res.status(201).send({ uid: userRecord.uid });
     } catch (error) {
         console.error('Error creating new user:', error);
@@ -52,7 +52,7 @@ router.post("/signup", async (req, res) => {
 //  session creation
 
 router.post('/sessionLogin', async (req, res) => {
-    console.log("inside session login route");
+    // console.log("inside session login route");
     const idToken = req.body.idToken.toString();
     
 
@@ -62,7 +62,7 @@ router.post('/sessionLogin', async (req, res) => {
         const sessionCookie = await admin.auth().createSessionCookie(idToken, { expiresIn });
         const options = { maxAge: expiresIn, httpOnly: true, secure: true };
         res.cookie('session', sessionCookie, options);
-        console.log('session cookie sent');
+        // console.log('session cookie sent');
         res.status(200).send({ status: 'success' });
     } catch (error) {
         res.status(401).send('UNAUTHORIZED REQUEST!');

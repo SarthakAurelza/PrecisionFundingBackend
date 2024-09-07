@@ -18,7 +18,7 @@ router.post('/create-user', async (req, res) => {
     const email=req.body.email;
     const name =req.body.name;
 
-    console.log("inside create user route");
+    // console.log("inside create user route");
     try {
         
         // Check if the user already exists in Stripe
@@ -27,8 +27,8 @@ router.post('/create-user', async (req, res) => {
         });
 
         if (customers.data.length > 0) {
-            console.log("customer already exitsts");
-            console.log(customers.data);
+            // console.log("customer already exitsts");
+            // console.log(customers.data);
             // User already exists in Stripe
             return res.status(200).json(customers.data[0]);
         }
@@ -40,7 +40,7 @@ router.post('/create-user', async (req, res) => {
         });
 
         res.status(200).json(customer);
-        console.log(customer);
+        // console.log(customer);
     } catch (error) {
         console.error('Error creating user:', error);
         res.status(400).json({ error: error.message });
@@ -55,7 +55,7 @@ router.post('/create-user', async (req, res) => {
 router.post('/create-portal-session',verifySessionCookie, async (req, res) => {
     
     try {
-        console.log(req.user);
+        // console.log(req.user);
         const {user_id} =req.user
 
           // Fetch the customerId from Firestore
@@ -122,7 +122,7 @@ router.get('/active-subscriptions', verifySessionCookie, async (req, res) => {
       const activeSubscriptions = subscriptions.data.filter(
         (subscription) => subscription.status === 'active'
       );
-    console.log(activeSubscriptions);
+    // console.log(activeSubscriptions);
       res.json({ activeSubscriptions });
     } catch (error) {
       console.error('Error retrieving active subscriptions:', error);

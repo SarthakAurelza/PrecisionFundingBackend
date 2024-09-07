@@ -51,9 +51,9 @@ app.use((req, res, next) => {
   }
 
   const csrfToken = req.cookies['csrfToken']
-  console.log(req.cookies);
+  // console.log(req.cookies);
   if (!tokens.verify(secret, csrfToken)) {
-    console.log("verifying csrf")
+    // console.log("verifying csrf")
     return res.status(403).json({ error: "Invalid CSRF token" });
   }
 

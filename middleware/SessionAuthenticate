@@ -1,17 +1,17 @@
 const { getAuth } = require('firebase-admin/auth');
 
 const verifySessionCookie = async (req, res, next) => {
-    console.log('some protected route requested');
+    // console.log('some protected route requested');
     // console.log('here is my cookie in req');
     // console.log(req.cookies);
     const sessionCookie = req.cookies.session || '';
     try {
-        console.log('verifiying session cookie');
+        // console.log('verifiying session cookie');
         const decodedClaims = await getAuth().verifySessionCookie(sessionCookie, true);
         req.user = decodedClaims;
         next();
     } catch (error) {
-        console.log('session unverified');
+        // console.log('session unverified');
         res.status(401).send('UNAUTHORIZED REQUEST!');
     }
 };
