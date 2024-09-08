@@ -129,9 +129,9 @@ router.post('/handlerithmic', verifySessionCookie, async (req, res) => {
 
     console.log('UserData: ', userData);
 
-    const {addUserPath, addUserFileName} = generateAddUserCSV(userInfo);
-    const {addAccountPath, addAccountFileName} = generateAddAccountCSV(userInfo);
-    const {assignAccountPath, assignAccountFileName} = generateAssignAccountCSV(userInfo);
+    const {addUserPath, addUserFileName} = generateAddUserCSV(userData);
+    const {addAccountPath, addAccountFileName} = generateAddAccountCSV(userData);
+    const {assignAccountPath, assignAccountFileName} = generateAssignAccountCSV(userData);
   
     //* Open the connection
     const client = new SFTPClient();
