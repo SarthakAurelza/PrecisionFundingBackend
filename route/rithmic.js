@@ -157,6 +157,7 @@ router.post('/handlerithmic', verifySessionCookie, async (req, res) => {
     }
     else {
       rithmicUserId = userData.rithmicUserId;
+      randomPassword = userData.rithmicPassword;
     }
     const {filePath: addAccountPath, fileName: addAccountFileName, accountUserId} = generateAddAccountCSV(userData, accountId);
     let incrementedAccountId = incrementStringByOne(accountId);
@@ -181,7 +182,7 @@ router.post('/handlerithmic', verifySessionCookie, async (req, res) => {
   
     await client.disconnect();
   
-    res.status(200).json({ message: 'Rithmic account created successfully.' });
+    res.status(200).json({ message: 'Rithmic account created successfully.', email: userData.email, rithmicPassword: randomPassword });
   } catch (error) {
     console.error('Error retrieving user data:', error);
     res.status(400).json({ error: error.message });
