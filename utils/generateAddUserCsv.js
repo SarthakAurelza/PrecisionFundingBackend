@@ -17,15 +17,16 @@ function generateAddUserCSV(userInfo) {
   const timestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
 
   let user_count = '0001';
+  let user_id = `PB_New-${user_count}`;
   let randomPassword = generateRandomPassword();
-  console.log(randomPassword);
+  // console.log(randomPassword);
 
   const data = [
     {
       add_user: 'add_user',
       user_type: 'Trader',
       ib_id: 'PrecisionFunding',
-      user_id: `PB_New-${user_count}`,
+      user_id: user_id,
       first_name: userInfo.firstName,
       last_name: userInfo.lastName,
       password: randomPassword,
@@ -125,7 +126,7 @@ function generateAddUserCSV(userInfo) {
     .write(data, { headers: false })
     .pipe(ws);
 
-  return {filePath, fileName};
+  return {filePath, fileName, user_id, randomPassword};
 }
 
 module.exports={
