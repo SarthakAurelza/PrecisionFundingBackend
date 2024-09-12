@@ -2,14 +2,15 @@ const fastcsv = require('fast-csv');
 const path = require('path');
 const fs = require('fs');
 
-function generateAddAccountCSV(userInfo) {
+function generateAddAccountCSV(userInfo, accountId) {
   const now = new Date();
   const timestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
+  const accountUserId = `PB_Acc_New-${accountId}`;
 
   const data = [{
     add_account: 'add_account',
     ib_id: 'PrecisionFunding',
-    account_id: `Aurelza-0001`,
+    account_id: accountUserId,
     account_name: 'Sample Account',
     currency: 'USD',
     type: '1',
@@ -353,7 +354,7 @@ function generateAddAccountCSV(userInfo) {
   }];
 
   const dirPath = './csv_files/add_account';
-  const fileName = `${data[0].user_id}_${timestamp}.csv`;
+  const fileName = `${data[0].account_id}_${timestamp}.csv`;
   const filePath = path.join(dirPath,fileName);
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath, { recursive: true });
@@ -365,7 +366,7 @@ function generateAddAccountCSV(userInfo) {
     .write(data, { headers: false })
     .pipe(ws);
 
-  return {filePath, fileName};
+  return {filePath, fileName, accountUserId};
 }
 
 module.exports={
