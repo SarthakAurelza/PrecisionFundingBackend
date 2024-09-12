@@ -6,6 +6,10 @@ const {generateAddUserCSV} = require("../utils/generateAddUserCsv");
 const {generateAddAccountCSV} = require("../utils/generateAddAccountCsv");
 const {generateAssignAccountCSV} = require("../utils/generateAssignAccountCsv");
 
+function incrementStringByOne(str) {
+  return String(parseInt(str) + 1).padStart(str.length, "0");
+}
+
 class SFTPClient {
   constructor() {
     this.client = new Client();
@@ -114,8 +118,10 @@ router.post('/handlerithmic', verifySessionCookie, async (req, res) => {
   try {
     const {user_id} =req.user
 
+    const userDocRef = admin.firestore().collection('users').doc(user_id);
+
     // Fetch the customerId from Firestore
-    const userDoc = await admin.firestore().collection('users').doc(user_id).get();
+    const userDoc = await userDocRef.get();
 
     if (!userDoc.exists) {
       throw new Error('User does not exist');
@@ -123,13 +129,30 @@ router.post('/handlerithmic', verifySessionCookie, async (req, res) => {
 
     const userData = userDoc.data();
 
-    if (!customerId) {
-      throw new Error('Customer ID not found for user');
+    if (!userData) {
+      throw new Error('Data not found for user');
     }
 
     console.log('UserData: ', userData);
 
-    const {addUserPath, addUserFileName} = generateAddUserCSV(userData);
+    const rithmicAccountCountRef = admin.firestore().collection('rithmicAccountCount').doc('main');
+    const rithmicAccountCount = await rithmicAccountCountRef.get();
+    let {userId, accountId} = rithmicAccountCount.data();
+    console.log(rithmicAccountCount.data());
+
+    // Generate Rithmic User and Save credentials to firestore
+    if(userData.rithmicUserId === undefined && userData.rithmicPassword === undefined) {
+      const {filePath: addUserPath, fileName: addUserFileName, user_id: rithmicUserId, randomPassword} = generateAddUserCSV(userData, userId);
+      userId = incrementStringByOne(userId);
+      console.log(userId, addUserPath, addUserFileName, rithmicUserId, randomPassword);
+      await userDocRef.update({
+        rithmicUserId: rithmicUserId,
+        rithmicPassword: randomPassword,
+      });
+      await rithmicAccountCountRef.update({
+        userId: userId,
+      });
+    }
     const {addAccountPath, addAccountFileName} = generateAddAccountCSV(userData);
     const {assignAccountPath, assignAccountFileName} = generateAssignAccountCSV(userData);
   
