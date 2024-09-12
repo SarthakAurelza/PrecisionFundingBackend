@@ -12,11 +12,10 @@ function generateRandomPassword() {
   return retVal;
 }
 
-function generateAddUserCSV(userInfo) {
+function generateAddUserCSV(userInfo, user_count) {
   const now = new Date();
   const timestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
-
-  let user_count = '0001';
+  
   let user_id = `PB_New-${user_count}`;
   let randomPassword = generateRandomPassword();
   // console.log(randomPassword);
