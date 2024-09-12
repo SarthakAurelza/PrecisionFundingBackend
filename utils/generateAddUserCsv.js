@@ -2,21 +2,33 @@ const fastcsv = require('fast-csv');
 const path = require('path');
 const fs = require('fs');
 
+function generateRandomPassword() {
+  let length = 13,
+      charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$",
+      retVal = "";
+  for (let i = 0, n = charset.length; i < length; ++i) {
+      retVal += charset.charAt(Math.floor(Math.random() * n));
+  }
+  return retVal;
+}
+
 function generateAddUserCSV(userInfo) {
   const now = new Date();
   const timestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
 
-  let user_count = '0003';
+  let user_count = '0001';
+  let randomPassword = generateRandomPassword();
+  console.log(randomPassword);
 
   const data = [
     {
       add_user: 'add_user',
       user_type: 'Trader',
       ib_id: 'PrecisionFunding',
-      user_id: `Aurelza-${user_count}`,
+      user_id: `PB_New-${user_count}`,
       first_name: userInfo.firstName,
       last_name: userInfo.lastName,
-      password: userInfo.customerId,
+      password: randomPassword,
       email: userInfo.email,
       user_max_count: 1,
       login_expiration: '',
