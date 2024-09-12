@@ -140,21 +140,33 @@ router.post('/handlerithmic', verifySessionCookie, async (req, res) => {
     let {userId, accountId} = rithmicAccountCount.data();
     console.log(rithmicAccountCount.data());
 
+    let addUserPath, addUserFileName, rithmicUserId, randomPassword;
+
     // Generate Rithmic User and Save credentials to firestore
     if(userData.rithmicUserId === undefined && userData.rithmicPassword === undefined) {
-      const {filePath: addUserPath, fileName: addUserFileName, user_id: rithmicUserId, randomPassword} = generateAddUserCSV(userData, userId);
-      userId = incrementStringByOne(userId);
-      console.log(userId, addUserPath, addUserFileName, rithmicUserId, randomPassword);
+      ({filePath: addUserPath, fileName: addUserFileName, user_id: rithmicUserId, randomPassword} = generateAddUserCSV(userData, userId));
+      let incrementedUserId = incrementStringByOne(userId);
       await userDocRef.update({
         rithmicUserId: rithmicUserId,
         rithmicPassword: randomPassword,
       });
       await rithmicAccountCountRef.update({
-        userId: userId,
+        userId: incrementedUserId,
       });
+      // await client.uploadFile(addUserPath, `./RithmicTest/add_user/${addUserFileName}`);
     }
-    const {addAccountPath, addAccountFileName} = generateAddAccountCSV(userData);
-    const {assignAccountPath, assignAccountFileName} = generateAssignAccountCSV(userData);
+    else {
+      rithmicUserId = userData.rithmicUserId;
+    }
+    const {filePath: addAccountPath, fileName: addAccountFileName, accountUserId} = generateAddAccountCSV(userData, accountId);
+    let incrementedAccountId = incrementStringByOne(accountId);
+    await userDocRef.update({
+      accountUserIds: admin.firestore.FieldValue.arrayUnion(accountUserId),
+    });
+    await rithmicAccountCountRef.update({
+      accountId: incrementedAccountId,
+    });
+    const {assignAccountPath, assignAccountFileName} = generateAssignAccountCSV(userData, rithmicUserId, accountUserId);
   
     //* Open the connection
     const client = new SFTPClient();
@@ -164,7 +176,6 @@ router.post('/handlerithmic', verifySessionCookie, async (req, res) => {
     await client.listFiles(".");
   
     //* Upload local file to remote file
-    // await client.uploadFile(addUserPath, `./RithmicTest/add_user/${addUserFileName}`);
     // await client.uploadFile(addAccountPath, `./RithmicTest/add_account/${addAccountFileName}`);
     // await client.uploadFile(assignAccountPath, `./RithmicTest/assign_account/${assignAccountFileName}`);
   
