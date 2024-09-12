@@ -2,7 +2,7 @@ const fastcsv = require('fast-csv');
 const path = require('path');
 const fs = require('fs');
 
-function generateAssignAccountCSV(userInfo) {
+function generateAssignAccountCSV(userInfo, user_id, account_id) {
   const now = new Date();
   const timestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
 
@@ -10,8 +10,8 @@ function generateAssignAccountCSV(userInfo) {
     {
       assign_account_to_user: 'assign_account_to_user',
       ib_id: 'PrecisionFunding',
-      user_id: `A-1`,
-      account_id: `A-1`,
+      user_id: user_id,
+      account_id: account_id,
       access_type: 'Read Only',
     },
   ];
@@ -33,5 +33,5 @@ function generateAssignAccountCSV(userInfo) {
 }
 
 module.exports={
-    generateAssignAccountCSV
+  generateAssignAccountCSV
 }
