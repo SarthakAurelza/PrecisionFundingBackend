@@ -1,3 +1,5 @@
 /node_modules/
 .env
 /csv_files/*/*.csv
+# Local Netlify folder
+.netlify
