@@ -7,8 +7,9 @@ require('dotenv').config();
 const stripe = require('stripe')(process.env.STRIPE_KEY);
 
 
-
-
+const handleSuccessfulPayment = (paymentIntent) => {
+  console.log("Payment handled succesfully.");
+}
 
 
 
@@ -47,8 +48,31 @@ router.post('/create-user', async (req, res) => {
     }
 });
 
+const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET
 
+router.post('/webhook', (req, res) => {
+  console.log('Entered Webhook')
+  const sig = req.headers['stripe-signature'];
 
+  let event;
+  try {
+      event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+      console.log(event)
+  } catch (err) {
+      console.error('Webhook signature verification failed.', err);
+      return res.sendStatus(400);
+  }
+
+  // Handle event
+  if (event.type === 'payment_intent.succeeded') {
+      const paymentIntent = event.data.object;
+      console.log(paymentIntent);
+      handleSuccessfulPayment(paymentIntent);
+
+  }
+
+  res.json({ received: true });
+});
 
 
 

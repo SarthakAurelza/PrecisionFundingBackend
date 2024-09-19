@@ -36,12 +36,12 @@ app.get('/csrf-token', (req, res) => {
     csrfToken = tokens.create(secret);
     res.cookie('csrfToken', csrfToken, {
       httpOnly: true,
-      sameSite: "lax", // Change to "strict" if possible
+      sameSite: "lax",
       path: "/",
-      secure: false, // Set to true in production
+      secure: process.env.NODE_ENV, // Should be true in production
     });
   }
-  res.json({ });
+  res.json({ csrfToken });
 });
 
 // CSRF protection middleware
