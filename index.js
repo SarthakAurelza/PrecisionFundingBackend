@@ -13,10 +13,12 @@ const PORT = process.env.PORT || 5000;
 
 
 // Setting up CORS
-app.use(cors({
-  origin: process.env.CLIENT_ORIGIN,
-  credentials: true,
-}));
+// app.use(cors({
+//   origin: process.env.CLIENT_ORIGIN,
+//   credentials: true,
+// }));
+
+app.use(cors());
 
 // Middleware for parsing JSON and URL-encoded data
 app.use(express.json());
@@ -36,13 +38,17 @@ app.get('/csrf-token', (req, res) => {
     csrfToken = tokens.create(secret);
     res.cookie('csrfToken', csrfToken, {
       httpOnly: true,
-      sameSite: "lax", // Change to "strict" if possible
+      sameSite: "lax",
       path: "/",
-      secure: false, // Set to true in production
+      secure: process.env.NODE_ENV, // Should be true in production
     });
   }
-  res.json({ });
+  res.json({ csrfToken });
 });
+
+app.get('/',(req,res) => {
+  res.json({"hi":"hi"})
+})
 
 // CSRF protection middleware
 app.use((req, res, next) => {
