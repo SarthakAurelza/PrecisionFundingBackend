@@ -133,12 +133,12 @@ router.post('/handlerithmic', verifySessionCookie, async (req, res) => {
       throw new Error('Data not found for user');
     }
 
-    // console.log('UserData: ', userData);
+    console.log('UserData: ', userData);
 
     const rithmicAccountCountRef = admin.firestore().collection('rithmicAccountCount').doc('main');
     const rithmicAccountCount = await rithmicAccountCountRef.get();
     let {userId, accountId} = rithmicAccountCount.data();
-    // console.log(rithmicAccountCount.data());
+    console.log(rithmicAccountCount.data());
 
     let addUserPath, addUserFileName, rithmicUserId, randomPassword;
 
