@@ -46,6 +46,10 @@ app.get('/csrf-token', (req, res) => {
   res.json({ csrfToken });
 });
 
+app.get('/',(req,res) => {
+  res.json({"hi":"hi"})
+})
+
 // CSRF protection middleware
 app.use((req, res, next) => {
   if (["GET", "HEAD", "OPTIONS"].includes(req.method)) {
