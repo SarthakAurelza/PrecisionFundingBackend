@@ -13,10 +13,12 @@ const PORT = process.env.PORT || 5000;
 
 
 // Setting up CORS
-app.use(cors({
-  origin: process.env.CLIENT_ORIGIN,
-  credentials: true,
-}));
+// app.use(cors({
+//   origin: process.env.CLIENT_ORIGIN,
+//   credentials: true,
+// }));
+
+app.use(cors());
 
 // Middleware for parsing JSON and URL-encoded data
 app.use(express.json());
